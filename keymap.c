@@ -54,7 +54,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //,-----------------------------------------------------.                    ,-----------------------------------------------------.
     KC_TRNS, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSLS,
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-    KC_TRNS, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                           KC_MINS, KC_EQL,  KC_GRV,  KC_LBRC, KC_RBRC, KC_PIPE,
+    KC_LALT, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                           KC_MINS, KC_EQL,  KC_GRV,  KC_LBRC, KC_RBRC, KC_PIPE,
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
     KC_TRNS, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,                           KC_UNDS, KC_PLUS, KC_TILD, KC_LCBR, KC_RCBR, MO(_THIRD),
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -68,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
     KC_MUTE, KC_MPRV, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY,                        KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_TRNS, KC_TRNS,
     //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-    RGB_TOG, RGB_RMOD,RGB_MOD, RGB_HUD, RGB_HUI, RGB_SAD,                        RGB_SAI, RGB_VAD, RGB_VAI, RGB_SPD, RGB_SPI, KC_TRNS,
+    RGB_TOG, RGB_RMOD,RGB_MOD, RGB_VAD, RGB_VAI, KC_TRNS,                        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                         KC_TRNS,    KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
                                         //`--------------------------'  `--------------------------'
@@ -275,32 +275,34 @@ bool oled_task_user(){
     //     0x0f, 0x0f, 0x1f, 0x1f, 0x1c, 0x1c, 0x0c, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     // };
 
-    switch (get_highest_layer(layer_state)) {
-        case _BASE:
-            /*oled_write("Main Layer", false);*/
-            oled_write_raw_P(qwerty_img, sizeof(qwerty_img));
-            break;
-        case _FIRST:
-            oled_write_raw_P(raise_img, sizeof(raise_img));
-            break;
-        case _SECOND:
-            oled_write_raw_P(lower_img, sizeof(lower_img));
-            break;
-        case _THIRD:
-            oled_write_raw_P(adjust_img, sizeof(adjust_img));
-            break;
-        // case _EXTRA:
-        //     oled_write_raw_P(extra_img, sizeof(extra_img));
-        //     break;
-        // default:
-        //     oled_write_ln_P(PSTR("Undefined"), false);
-    }
+    if (is_keyboard_master()) {
+        switch (get_highest_layer(layer_state)) {
+            case _BASE:
+                /*oled_write("Main Layer", false);*/
+                oled_write_raw_P(qwerty_img, sizeof(qwerty_img));
+                break;
+            case _FIRST:
+                oled_write_raw_P(lower_img, sizeof(lower_img));
+                break;
+            case _SECOND:
+                oled_write_raw_P(raise_img, sizeof(raise_img));
+                break;
+            case _THIRD:
+                oled_write_raw_P(adjust_img, sizeof(adjust_img));
+                break;
+            // case _EXTRA:
+            //     oled_write_raw_P(extra_img, sizeof(extra_img));
+            //     break;
+            // default:
+            //     oled_write_ln_P(PSTR("Undefined"), false);
+        }
 
-    // Display LED status
-    // led_t led_state = host_keyboard_led_state();
-    // oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
-    // oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
-    // oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+        // Display LED status
+        // led_t led_state = host_keyboard_led_state();
+        // oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
+        // oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
+        // oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+    }
 
     return false;
 }

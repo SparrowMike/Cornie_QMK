@@ -1,13 +1,6 @@
 #pragma once
 
-//#define USE_MATRIX_I2C
-
-/* Select hand configuration */
-
 #define MASTER_LEFT
-// #define EE_HANDS
-
-//#define QUICK_TAP_TERM 0
 
 #ifdef RGBLIGHT_ENABLE
     #define RGBLIGHT_EFFECT_BREATHING
